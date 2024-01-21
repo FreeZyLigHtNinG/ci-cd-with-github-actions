@@ -28,10 +28,16 @@ def deploy():
     ref = payload.get('ref', '')
     response = ('', 204)
     if ref == 'refs/heads/main':
-        os.system("git pull origin main")
-        os.system("pip3 install -r requirements.txt")
-        subprocess.call(['sh', 'ci-cd-with-github-actions/deploy.sh'])
-        response = 'App running'
+        try :
+            if app.pid :
+                os.kill(app_pid, 15)
+            os.system("git pull origin main")
+            os.system("pip3 install -r requirements.txt")
+            app_process = subprocess.Popen(['python', 'app.py'])
+            app_pid = app_process.pid
+            response = 'App running'
+        except Exception as e:
+            response = f'Error during deployment: {str(e)}'
     return response
 
 
