@@ -24,6 +24,7 @@ def staging():
 
 @app.route('/deploy', methods=['POST'])
 def deploy():
+    global app_pid
     payload = request.json
     ref = payload.get('ref', '')
     response = ('', 204)
@@ -31,6 +32,7 @@ def deploy():
         try :
             if app.pid :
                 os.kill(app_pid, 15)
+                app_pid = None
             os.system("git pull origin main")
             os.system("pip3 install -r requirements.txt")
             app_process = subprocess.Popen(['python', 'app.py'])
