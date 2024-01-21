@@ -30,7 +30,7 @@ def deploy():
     if ref == 'refs/heads/main':
         os.system("git pull origin main")
         os.system("pip3 install -r requirements.txt")
-        subprocess.call(['sh', './deploy.sh'])
+        subprocess.call(['sh', 'deploy.sh'])
         response = 'App running'
     return response
 
